@@ -38,7 +38,7 @@ class OuraClient:
         return data
     
     async def async_get_ring_configuration(self) -> list[RingConfiguration]:
-        return [RingConfiguration({
+        return [RingConfiguration(**{
             "id": "ring",
             "color": "stealth_black",
             "design": "balance",
