@@ -33,12 +33,12 @@ class OuraClient:
 
     async def async_get_data(self) -> list[Any]:
         data = []
-        data.append(await self.async_get_ring_configuration()[0])
-        data.append(await self.async_daily_readiness()[0])
+        data.append((await self.async_get_ring_configuration())[0])
+        data.append((await self.async_daily_readiness())[0])
         return data
     
     async def async_get_ring_configuration(self) -> list[RingConfiguration]:
-        return {
+        return [RingConfiguration({
             "id": "ring",
             "color": "stealth_black",
             "design": "balance",
@@ -46,8 +46,8 @@ class OuraClient:
             "hardware_type": "gen4",
             "set_up_at": "2024-11-11",
             "size": 13
-        }
-        data = await self.make_request("GET", f"ring_configuration")
+        })]
+        data = await self.make_request("GET", f"ring_configuration?start_date={today.strftime('%Y-%m-%d')}&end_date={tomorrow.strftime('%Y-%m-%d')}")
         try:
             rings = [RingConfiguration(**a) for a in data['data']]
         except KeyError:
