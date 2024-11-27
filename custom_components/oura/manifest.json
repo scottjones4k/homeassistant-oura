@@ -1,0 +1,12 @@
+{
+    "domain": "oura",
+    "name": "Oura Ring",
+    "codeowners": [],
+    "config_flow": true,
+    "dependencies": ["application_credentials"],
+    "documentation": "https://github.com/scottjones4k/homeassistant-oura",
+    "iot_class": "cloud_polling",
+    "loggers": ["oura"],
+    "requirements": ["aiohttp>=3.9.4", "pydantic"],
+    "version": "1.0.0"
+  }

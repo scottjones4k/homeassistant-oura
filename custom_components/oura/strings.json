@@ -1,0 +1,29 @@
+{
+    "config": {
+      "step": {
+        "user": {
+          "data": {
+            "name": "Name",
+            "token": "Personal Access Token"
+          }
+        }
+      },
+      "abort": {
+        "already_configured": "Account is already configured",
+        "already_in_progress": "Configuration flow is already in progress"
+      },
+      "create_entry": {
+        "default": "Successfully added"
+      }
+    },
+    "entity": {
+      "sensor": {
+        "daily_readiness": {
+          "name": "Daily Readiness"
+        },
+        "last_collected": {
+          "name": "Last Collected"
+        }
+      }
+    }
+  }
