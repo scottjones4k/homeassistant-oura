@@ -7,6 +7,8 @@ from typing import Any
 from aiohttp import ClientResponse
 from .models.ring_configuration import RingConfiguration
 from .models.daily_readiness import DailyReadiness
+from .models.daily_resilience import DailyResilience
+from .models.daily_sleep import DailySleep
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -33,8 +35,9 @@ class OuraClient:
 
     async def async_get_data(self) -> list[Any]:
         data = []
-        data.append((await self.async_get_ring_configuration())[0])
-        data.append((await self.async_daily_readiness())[0])
+        data.extend(await self.async_get_ring_configuration())
+        data.extend(await self.async_daily_readiness())
+        data.extend(await self.async_daily_resilience())
         return data
     
     async def async_get_ring_configuration(self) -> list[RingConfiguration]:
@@ -56,9 +59,7 @@ class OuraClient:
         return rings
     
     async def async_daily_readiness(self) -> list[DailyReadiness]:
-        today = datetime.today()
-        tomorrow = today + timedelta(days=1)
-        data = await self.make_request("GET", f"daily_readiness?start_date={today.strftime('%Y-%m-%d')}&end_date={tomorrow.strftime('%Y-%m-%d')}")
+        data = await self.make_request("GET", "daily_readiness", params=build_params())
         try:
             readiness = [DailyReadiness(**a) for a in data['data']]
         except KeyError:
@@ -66,6 +67,32 @@ class OuraClient:
             _raise_auth_or_response_error(data)
         return readiness
     
+    async def async_daily_resilience(self) -> list[DailyResilience]:
+        data = await self.make_request("GET", "daily_resilience", params=build_params())
+        try:
+            resilience = [DailyResilience(**a) for a in data['data']]
+        except KeyError:
+            _LOGGER.error("Failed to get resilience from Oura API: %s", str(data))
+            _raise_auth_or_response_error(data)
+        return resilience
+    
+    async def async_daily_resilience(self) -> list[DailySleep]:
+        data = await self.make_request("GET", "daily_sleep", params=build_params())
+        try:
+            sleep = [DailySleep(**a) for a in data['data']]
+        except KeyError:
+            _LOGGER.error("Failed to get sleep from Oura API: %s", str(data))
+            _raise_auth_or_response_error(data)
+        return sleep
+    
+def build_params():
+    today = datetime.today()
+    tomorrow = today + timedelta(days=1)
+    return {
+        "start_date": today.strftime('%Y-%m-%d'),
+        "end_date": tomorrow.strftime('%Y-%m-%d')
+    }
+
 async def _raise_auth_or_response_error(response: dict[str, Any]) -> None:
     raise InvalidOuraAPIResponseError
 

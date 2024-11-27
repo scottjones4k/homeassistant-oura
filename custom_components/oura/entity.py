@@ -29,7 +29,8 @@ class OuraBaseEntity(CoordinatorEntity):
     def __init__(
         self,
         coordinator: DataUpdateCoordinator,
-        idx
+        idx,
+        name
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, context=idx)
@@ -39,8 +40,8 @@ class OuraBaseEntity(CoordinatorEntity):
             entry_type=DeviceEntryType.SERVICE,
             identifiers={(DOMAIN, str(self.idx))},
             manufacturer="Oura",
-            model=f"{self.ring.color}-{self.ring.design}-{self.ring.hardware_type}",
-            name=f"{self.ring.color.capitalize()} {self.ring.design.capitalize()} {self.ring.hardware_type.capitalize()} Ring",
+            model=f"{self.ring.color.capitalize()} {self.ring.design.capitalize()} {self.ring.hardware_type.capitalize()} Ring",
+            name=name,
         )
 
     @property
@@ -52,3 +53,8 @@ class OuraBaseEntity(CoordinatorEntity):
     def ring(self) -> RingConfiguration:
         """Shortcut to access coordinator data for the entity."""
         return self.coordinator.data["ring"]
+    
+    @property
+    def available(self) -> bool:
+        """Shortcut to access coordinator data for the entity."""
+        return self.idx in self.coordinator.data

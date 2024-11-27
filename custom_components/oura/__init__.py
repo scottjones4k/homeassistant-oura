@@ -5,7 +5,7 @@ import secrets
 import logging
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import Platform, CONF_TOKEN
+from homeassistant.const import Platform, CONF_TOKEN, CONF_NAME
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -19,16 +19,18 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Oura from a config entry."""
-    uprn: str = entry.data[CONF_TOKEN]
+    token: str = entry.data[CONF_TOKEN]
+    name: str = entry.data[CONF_NAME]
 
     websession = async_get_clientsession(hass)
-    client = OuraClient(API_ENDPOINT, websession, uprn)
+    client = OuraClient(API_ENDPOINT, websession, token)
     coordinator = OuraUpdateCoordinator(hass, client)
 
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = {
-        "coordinator": coordinator
+        "coordinator": coordinator,
+        "name": name
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

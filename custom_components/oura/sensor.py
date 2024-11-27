@@ -43,6 +43,17 @@ DAILY_SENSORS = (
         value_fn=lambda data: data.score,
         state_class=SensorStateClass.MEASUREMENT
     ),
+    OuraSensorEntityDescription(
+        key="daily_resilience",
+        translation_key="daily_resilience",
+        value_fn=lambda data: data.level
+    ),
+    OuraSensorEntityDescription(
+        key="daily_sleep",
+        translation_key="daily_sleep",
+        value_fn=lambda data: data.score,
+        state_class=SensorStateClass.MEASUREMENT
+    ),
 )
 
 
@@ -53,13 +64,15 @@ async def async_setup_entry(
 ) -> None:
     """Set up Oura sensor platform."""
     coordinator: OuraUpdateCoordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
+    name: str = hass.data[DOMAIN][config_entry.entry_id]["name"]
 
     await coordinator.async_config_entry_first_refresh()
 
     sensors = [
         OuraSensor(
             coordinator,
-            entity_description
+            entity_description,
+            name
         )
         for entity_description in DAILY_SENSORS
     ]
@@ -72,11 +85,12 @@ class OuraSensor(OuraBaseEntity, SensorEntity):
     def __init__(
         self,
         coordinator: DataUpdateCoordinator,
-        entity_description
+        entity_description,
+        name
     ) -> None:
         """Initialize the sensor."""
         idx = entity_description.key
-        super().__init__(coordinator, idx)
+        super().__init__(coordinator, idx, name)
 
         self.entity_description = entity_description
 
