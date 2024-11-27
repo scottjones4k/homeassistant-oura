@@ -38,7 +38,7 @@ class OuraBaseEntity(CoordinatorEntity):
 
         self._attr_device_info = DeviceInfo(
             entry_type=DeviceEntryType.SERVICE,
-            identifiers={(DOMAIN, str(self.idx))},
+            identifiers={(DOMAIN, str(self.ring.id))},
             manufacturer="Oura",
             model=f"{self.ring.color.capitalize()} {self.ring.design.capitalize()} {self.ring.hardware_type.capitalize()} Ring",
             name=name,

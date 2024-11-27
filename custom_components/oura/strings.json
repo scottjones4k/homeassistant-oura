@@ -21,8 +21,11 @@
         "daily_readiness": {
           "name": "Daily Readiness"
         },
-        "last_collected": {
-          "name": "Last Collected"
+        "daily_resilience": {
+          "name": "Daily Resilience"
+        },
+        "daily_sleep": {
+          "name": "Daily Sleep"
         }
       }
     }
