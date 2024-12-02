@@ -42,7 +42,7 @@ class OuraClient:
         data.extend(await self.async_daily_resilience())
         data.extend(await self.async_daily_sleep())
         data.extend(await self.async_daily_stress())
-        data.extend(await self.async_heartrate())
+        data.append(await self.async_heartrate())
         return data
     
     async def async_get_ring_configuration(self) -> list[RingConfiguration]:
@@ -93,13 +93,13 @@ class OuraClient:
     async def async_daily_stress(self) -> list[DailyStress]:
         data = await self.make_request("GET", "daily_stress", params=build_date_params())
         try:
-            stress = [DailySleep(**a) for a in data['data']]
+            stress = [DailyStress(**a) for a in data['data']]
         except KeyError:
             _LOGGER.error("Failed to get stress from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
         return stress
     
-    async def async_heartrate(self) -> list[DailyStress]:
+    async def async_heartrate(self) -> HeartRate:
         data = await self.make_request("GET", "heartrate", params=build_datetime_params())
         try:
             heartrate = HeartRate(**data['data'][-1])
