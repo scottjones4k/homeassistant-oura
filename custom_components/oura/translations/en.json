@@ -26,6 +26,12 @@
       },
       "daily_sleep": {
         "name": "Daily Sleep"
+      },
+      "heartrate": {
+        "name": "Heart Rate"
+      },
+      "daily_stress": {
+        "name": "Daily Stress"
       }
     }
   }
