@@ -5,7 +5,7 @@ class DailyStress(BaseModel):
     stress_high: int
     recovery_high: int
     day: str
-    day_summary: str
+    day_summary: str | None
 
     @property
     def lookup(self):
