@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class DailySleepContributors:
+class DailySleepContributors(BaseModel):
     deep_sleep: int
     efficiency: int
     latency: int

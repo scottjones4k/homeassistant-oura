@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class ReadinessContributors:
+class ReadinessContributors(BaseModel):
     activity_balance: int
     body_temperature: int
     hrv_balance: int
