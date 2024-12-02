@@ -37,7 +37,7 @@ class OuraClient:
 
     async def async_get_data(self) -> list[Any]:
         data = []
-        data.append(await self.async_get_ring_configuration())
+        data.extend(await self.async_get_ring_configuration())
         data.append(await self.async_daily_readiness())
         data.append(await self.async_daily_resilience())
         data.append(await self.async_daily_sleep())
