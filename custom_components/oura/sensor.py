@@ -118,3 +118,38 @@ class OuraSensor(OuraBaseEntity, SensorEntity):
             return None
 
         return state
+    
+    @property
+    def extra_state_attributes(self):
+        """Returns the sensor attributes."""
+        match self.entity_description.key:
+            case "daily_readiness":
+                return {
+                    "activity_balance": self.data.contributors.activity_balance,
+                    "body_temperature": self.data.contributors.body_temperature,
+                    "hrv_balance": self.data.contributors.hrv_balance,
+                    "previous_day_activity": self.data.contributors.previous_day_activity,
+                    "previous_night": self.data.contributors.previous_night,
+                    "recovery_index": self.data.contributors.recovery_index,
+                    "resting_heart_rate": self.data.contributors.resting_heart_rate,
+                    "sleep_balance": self.data.contributors.sleep_balance
+                }
+            case "daily_sleep":
+                return {
+                    "deep_sleep": self.data.contributors.deep_sleep,
+                    "efficiency": self.data.contributors.efficiency,
+                    "latency": self.data.contributors.latency,
+                    "rem_sleep": self.data.contributors.rem_sleep,
+                    "restfulness": self.data.contributors.restfulness,
+                    "timing": self.data.contributors.timing,
+                    "total_sleep": self.data.contributors.total_sleep
+                }
+            case "daily_resilience":
+                return {
+                    "sleep_recovery": self.contributors.sleep_recovery,
+                    "daytime_recovery": self.contributors.daytime_recovery,
+                    "stress": self.contributors.stress
+                }
+            case _:
+                return {}
+        return self._attributes
