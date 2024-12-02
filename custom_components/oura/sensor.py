@@ -146,9 +146,9 @@ class OuraSensor(OuraBaseEntity, SensorEntity):
                 }
             case "daily_resilience":
                 return {
-                    "sleep_recovery": self.contributors.sleep_recovery,
-                    "daytime_recovery": self.contributors.daytime_recovery,
-                    "stress": self.contributors.stress
+                    "sleep_recovery": self.data.contributors.sleep_recovery,
+                    "daytime_recovery": self.data.contributors.daytime_recovery,
+                    "stress": self.data.contributors.stress
                 }
             case _:
                 return {}
