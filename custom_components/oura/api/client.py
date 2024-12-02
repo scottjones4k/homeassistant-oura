@@ -9,6 +9,8 @@ from .models.ring_configuration import RingConfiguration
 from .models.daily_readiness import DailyReadiness
 from .models.daily_resilience import DailyResilience
 from .models.daily_sleep import DailySleep
+from .models.daily_stress import DailyStress
+from .models.heartrate import HeartRate
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -39,6 +41,8 @@ class OuraClient:
         data.extend(await self.async_daily_readiness())
         data.extend(await self.async_daily_resilience())
         data.extend(await self.async_daily_sleep())
+        data.extend(await self.async_daily_stress())
+        data.extend(await self.async_heartrate())
         return data
     
     async def async_get_ring_configuration(self) -> list[RingConfiguration]:
@@ -60,7 +64,7 @@ class OuraClient:
         return rings
     
     async def async_daily_readiness(self) -> list[DailyReadiness]:
-        data = await self.make_request("GET", "daily_readiness", params=build_params())
+        data = await self.make_request("GET", "daily_readiness", params=build_date_params())
         try:
             readiness = [DailyReadiness(**a) for a in data['data']]
         except KeyError:
@@ -69,7 +73,7 @@ class OuraClient:
         return readiness
     
     async def async_daily_resilience(self) -> list[DailyResilience]:
-        data = await self.make_request("GET", "daily_resilience", params=build_params())
+        data = await self.make_request("GET", "daily_resilience", params=build_date_params())
         try:
             resilience = [DailyResilience(**a) for a in data['data']]
         except KeyError:
@@ -78,7 +82,7 @@ class OuraClient:
         return resilience
     
     async def async_daily_sleep(self) -> list[DailySleep]:
-        data = await self.make_request("GET", "daily_sleep", params=build_params())
+        data = await self.make_request("GET", "daily_sleep", params=build_date_params())
         try:
             sleep = [DailySleep(**a) for a in data['data']]
         except KeyError:
@@ -86,11 +90,39 @@ class OuraClient:
             _raise_auth_or_response_error(data)
         return sleep
     
-def build_params():
+    async def async_daily_stress(self) -> list[DailyStress]:
+        data = await self.make_request("GET", "daily_stress", params=build_date_params())
+        try:
+            stress = [DailySleep(**a) for a in data['data']]
+        except KeyError:
+            _LOGGER.error("Failed to get stress from Oura API: %s", str(data))
+            _raise_auth_or_response_error(data)
+        return stress
+    
+    async def async_heartrate(self) -> list[DailyStress]:
+        data = await self.make_request("GET", "heartrate", params=build_datetime_params())
+        try:
+            heartrate = HeartRate(**data['data'][-1])
+        except IndexError:
+            _LOGGER.warning("Failed to get heart rate from Oura API: %s", str(data))
+        except KeyError:
+            _LOGGER.error("Failed to get heart rate from Oura API: %s", str(data))
+            _raise_auth_or_response_error(data)
+        return heartrate
+    
+def build_date_params():
     today = datetime.today()
     return {
         "start_date": today.strftime('%Y-%m-%d'),
         "end_date": today.strftime('%Y-%m-%d')
+    }
+
+def build_datetime_params():
+    today = datetime.today()
+    tomorrow = today + timedelta(days=1)
+    return {
+        "start_datetime": today.strftime('%Y-%m-%d'),
+        "end_datetime": tomorrow.strftime('%Y-%m-%d')
     }
 
 async def _raise_auth_or_response_error(response: dict[str, Any]) -> None:

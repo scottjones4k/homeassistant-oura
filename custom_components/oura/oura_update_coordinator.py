@@ -22,7 +22,7 @@ class OuraUpdateCoordinator(DataUpdateCoordinator):
             # Name of the data. For logging purposes.
             name="Oura",
             # Polling interval. Will only be polled if there are subscribers.
-            update_interval=timedelta(minutes=30),
+            update_interval=timedelta(minutes=5),
         )
         self._client = client
 

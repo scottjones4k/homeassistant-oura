@@ -54,6 +54,18 @@ DAILY_SENSORS = (
         value_fn=lambda data: data.score,
         state_class=SensorStateClass.MEASUREMENT
     ),
+    OuraSensorEntityDescription(
+        key="daily_stress",
+        translation_key="daily_stress",
+        value_fn=lambda data: data.stress_high,
+        state_class=SensorStateClass.MEASUREMENT
+    ),
+    OuraSensorEntityDescription(
+        key="heartrate",
+        translation_key="heartrate",
+        value_fn=lambda data: data.bpm,
+        state_class=SensorStateClass.MEASUREMENT
+    ),
 )
 
 
