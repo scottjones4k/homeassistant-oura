@@ -38,6 +38,7 @@ class OuraClient:
         data.extend(await self.async_get_ring_configuration())
         data.extend(await self.async_daily_readiness())
         data.extend(await self.async_daily_resilience())
+        data.extend(await self.async_daily_sleep())
         return data
     
     async def async_get_ring_configuration(self) -> list[RingConfiguration]:
@@ -76,7 +77,7 @@ class OuraClient:
             _raise_auth_or_response_error(data)
         return resilience
     
-    async def async_daily_resilience(self) -> list[DailySleep]:
+    async def async_daily_sleep(self) -> list[DailySleep]:
         data = await self.make_request("GET", "daily_sleep", params=build_params())
         try:
             sleep = [DailySleep(**a) for a in data['data']]
@@ -87,10 +88,9 @@ class OuraClient:
     
 def build_params():
     today = datetime.today()
-    tomorrow = today + timedelta(days=1)
     return {
         "start_date": today.strftime('%Y-%m-%d'),
-        "end_date": tomorrow.strftime('%Y-%m-%d')
+        "end_date": today.strftime('%Y-%m-%d')
     }
 
 async def _raise_auth_or_response_error(response: dict[str, Any]) -> None:
