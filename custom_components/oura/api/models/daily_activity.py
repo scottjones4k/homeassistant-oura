@@ -6,7 +6,6 @@ class DailyActivityContributors(BaseModel):
     recovery_time: int
     stay_active: int
     training_frequency: int
-    timing: int
     training_volume: int
 
 class DailyActivity(BaseModel):
