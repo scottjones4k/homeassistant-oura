@@ -10,7 +10,7 @@ from datetime import datetime
 
 from homeassistant.components.sensor import SensorEntity, SensorStateClass, SensorDeviceClass, SensorEntityDescription, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ATTR_ATTRIBUTION
+from homeassistant.const import ATTR_ATTRIBUTION, UnitOfLength, UnitOfTime, UnitOfMass
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers import entity_platform
@@ -34,37 +34,75 @@ DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 class OuraSensorEntityDescription(SensorEntityDescription):
     """Describes Oura sensor entity."""
 
+    lookup_key: str
     value_fn: Callable[[dict[str, Any]], StateType]
 
 DAILY_SENSORS = (
     OuraSensorEntityDescription(
         key="daily_readiness",
+        lookup_key="daily_readiness",
         translation_key="daily_readiness",
         value_fn=lambda data: data.score,
         state_class=SensorStateClass.MEASUREMENT
     ),
     OuraSensorEntityDescription(
         key="daily_resilience",
+        lookup_key="daily_resilience",
         translation_key="daily_resilience",
         value_fn=lambda data: data.level
     ),
     OuraSensorEntityDescription(
         key="daily_sleep",
+        lookup_key="daily_sleep",
         translation_key="daily_sleep",
         value_fn=lambda data: data.score,
         state_class=SensorStateClass.MEASUREMENT
     ),
     OuraSensorEntityDescription(
         key="daily_stress",
+        lookup_key="daily_stress",
         translation_key="daily_stress",
         value_fn=lambda data: data.stress_high,
         state_class=SensorStateClass.MEASUREMENT
     ),
     OuraSensorEntityDescription(
         key="heartrate",
+        lookup_key="heartrate",
         translation_key="heartrate",
         value_fn=lambda data: data.bpm,
         state_class=SensorStateClass.MEASUREMENT
+    ),
+    OuraSensorEntityDescription(
+        key="daily_cardiovascular_age",
+        lookup_key="daily_cardiovascular_age",
+        translation_key="daily_cardiovascular_age",
+        value_fn=lambda data: data.vascular_age,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTime.YEARS
+    ),
+    OuraSensorEntityDescription(
+        key="age",
+        lookup_key="personal_info",
+        translation_key="age",
+        value_fn=lambda data: data.age,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTime.YEARS
+    ),
+    OuraSensorEntityDescription(
+        key="height",
+        lookup_key="personal_info",
+        translation_key="height",
+        value_fn=lambda data: data.height,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfLength.METERS
+    ),
+    OuraSensorEntityDescription(
+        key="weight",
+        lookup_key="personal_info",
+        translation_key="weight",
+        value_fn=lambda data: data.weight,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfMass.KILOGRAMS
     ),
 )
 
@@ -101,7 +139,7 @@ class OuraSensor(OuraBaseEntity, SensorEntity):
         name
     ) -> None:
         """Initialize the sensor."""
-        idx = entity_description.key
+        idx = entity_description.lookup_key
         super().__init__(coordinator, idx, name)
 
         self.entity_description = entity_description

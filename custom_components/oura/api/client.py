@@ -11,6 +11,8 @@ from .models.daily_resilience import DailyResilience
 from .models.daily_sleep import DailySleep
 from .models.daily_stress import DailyStress
 from .models.heartrate import HeartRate
+from .models.daily_cardiovascular_age import DailyCardiovascularAge
+from .models.personal_info import PersonalInfo
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,6 +45,8 @@ class OuraClient:
         data.append(await self.async_daily_sleep())
         data.append(await self.async_daily_stress())
         data.append(await self.async_heartrate())
+        data.append(await self.async_cardiovascular_age())
+        data.append(await self.async_personal_info())
         return data
     
     async def async_get_ring_configuration(self) -> list[RingConfiguration]:
@@ -117,6 +121,28 @@ class OuraClient:
             _LOGGER.error("Failed to get heart rate from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
         return heartrate
+    
+    async def async_cardiovascular_age(self) -> DailyCardiovascularAge:
+        data = await self.make_request("GET", "daily_cardiovascular_age", params=build_date_params())
+        try:
+            stress = DailyStress(**data['data'][-1])
+        except IndexError:
+            _LOGGER.warning("Failed to get cardiovascular age from Oura API: %s", str(data))
+        except KeyError:
+            _LOGGER.error("Failed to get cardiovascular age from Oura API: %s", str(data))
+            _raise_auth_or_response_error(data)
+        return stress
+    
+    async def async_personal_info(self) -> PersonalInfo:
+        data = await self.make_request("GET", "personal_info")
+        try:
+            stress = DailyStress(**data)
+        except IndexError:
+            _LOGGER.warning("Failed to get personal info from Oura API: %s", str(data))
+        except KeyError:
+            _LOGGER.error("Failed to get personal info from Oura API: %s", str(data))
+            _raise_auth_or_response_error(data)
+        return stress
     
 def build_date_params():
     today = datetime.today()

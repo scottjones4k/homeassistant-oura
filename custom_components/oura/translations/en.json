@@ -32,6 +32,18 @@
       },
       "daily_stress": {
         "name": "Daily Stress"
+      },
+      "daily_cardiovascular_age": {
+        "name": "Daily Cardiovascular Age"
+      },
+      "weight": {
+        "name": "Weight"
+      },
+      "height": {
+        "name": "Height"
+      },
+      "age": {
+        "name": "Age"
       }
     }
   }
