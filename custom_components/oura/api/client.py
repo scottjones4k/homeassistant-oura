@@ -13,6 +13,7 @@ from .models.daily_stress import DailyStress
 from .models.heartrate import HeartRate
 from .models.daily_cardiovascular_age import DailyCardiovascularAge
 from .models.personal_info import PersonalInfo
+from .models.daily_activity import DailyActivity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,6 +48,7 @@ class OuraClient:
         data.append(await self.async_heartrate())
         data.append(await self.async_cardiovascular_age())
         data.append(await self.async_personal_info())
+        data.append(await self.async_activity())
         return data
     
     async def async_get_ring_configuration(self) -> list[RingConfiguration]:
@@ -125,31 +127,43 @@ class OuraClient:
     async def async_cardiovascular_age(self) -> DailyCardiovascularAge:
         data = await self.make_request("GET", "daily_cardiovascular_age", params=build_date_params())
         try:
-            stress = DailyCardiovascularAge(**data['data'][-1])
+            age = DailyCardiovascularAge(**data['data'][-1])
         except IndexError:
             _LOGGER.warning("Failed to get cardiovascular age from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get cardiovascular age from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return stress
+        return age
     
     async def async_personal_info(self) -> PersonalInfo:
         data = await self.make_request("GET", "personal_info")
         try:
-            stress = PersonalInfo(**data)
+            info = PersonalInfo(**data)
         except IndexError:
             _LOGGER.warning("Failed to get personal info from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get personal info from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return stress
+        return info
+    
+    async def async_activity(self) -> DailyActivity:
+        data = await self.make_request("GET", "daily_activity")
+        try:
+            activity = DailyActivity(**data['data'][-1])
+        except IndexError:
+            _LOGGER.warning("Failed to get activity from Oura API: %s", str(data))
+        except KeyError:
+            _LOGGER.error("Failed to get activity from Oura API: %s", str(data))
+            _raise_auth_or_response_error(data)
+        return activity
     
 def build_date_params():
     today = datetime.today()
-    yesterday = datetime.today() + timedelta(days=-1)
+    yesterday = today + timedelta(days=-1)
+    tomorrow = today + timedelta(days=1)
     return {
         "start_date": yesterday.strftime('%Y-%m-%d'),
-        "end_date": today.strftime('%Y-%m-%d')
+        "end_date": tomorrow.strftime('%Y-%m-%d')
     }
 
 def build_datetime_params():

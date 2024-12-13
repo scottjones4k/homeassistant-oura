@@ -10,7 +10,7 @@ from datetime import datetime
 
 from homeassistant.components.sensor import SensorEntity, SensorStateClass, SensorDeviceClass, SensorEntityDescription, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ATTR_ATTRIBUTION, UnitOfLength, UnitOfTime, UnitOfMass
+from homeassistant.const import ATTR_ATTRIBUTION, UnitOfLength, UnitOfTime, UnitOfMass, UnitOfEnergy
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers import entity_platform
@@ -103,6 +103,44 @@ DAILY_SENSORS = (
         value_fn=lambda data: data.weight,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfMass.KILOGRAMS
+    ),
+    OuraSensorEntityDescription(
+        key="daily_activity",
+        lookup_key="daily_activity",
+        translation_key="daily_activity",
+        value_fn=lambda data: data.score,
+        state_class=SensorStateClass.MEASUREMENT
+    ),
+    OuraSensorEntityDescription(
+        key="total_calories",
+        lookup_key="daily_activity",
+        translation_key="total_calories",
+        value_fn=lambda data: data.total_calories,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfEnergy.KILO_CALORIE
+    ),
+    OuraSensorEntityDescription(
+        key="target_calories",
+        lookup_key="daily_activity",
+        translation_key="target_calories",
+        value_fn=lambda data: data.target_calories,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfEnergy.KILO_CALORIE
+    ),
+    OuraSensorEntityDescription(
+        key="steps",
+        lookup_key="daily_activity",
+        translation_key="steps",
+        value_fn=lambda data: data.steps,
+        state_class=SensorStateClass.MEASUREMENT
+    ),
+    OuraSensorEntityDescription(
+        key="equivalent_walking_distance",
+        lookup_key="daily_activity",
+        translation_key="equivalent_walking_distance",
+        value_fn=lambda data: data.equivalent_walking_distance,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfLength.METERS
     ),
 )
 

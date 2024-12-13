@@ -44,6 +44,21 @@
       },
       "age": {
         "name": "Age"
+      },
+      "daily_activity": {
+        "name": "Daily Activity"
+      },
+      "steps": {
+        "name": "Steps"
+      },
+      "target_calories": {
+        "name": "Target Calories"
+      },
+      "total_calories": {
+        "name": "Total Calories"
+      },
+      "equivalent_walking_distance": {
+        "name": "Equivalent Walking Distance"
       }
     }
   }
