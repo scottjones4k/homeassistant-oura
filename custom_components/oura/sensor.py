@@ -128,6 +128,14 @@ DAILY_SENSORS = (
         native_unit_of_measurement=UnitOfEnergy.KILO_CALORIE
     ),
     OuraSensorEntityDescription(
+        key="active_calories",
+        lookup_key="daily_activity",
+        translation_key="active_calories",
+        value_fn=lambda data: data.active_calories,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfEnergy.KILO_CALORIE
+    ),
+    OuraSensorEntityDescription(
         key="steps",
         lookup_key="daily_activity",
         translation_key="steps",

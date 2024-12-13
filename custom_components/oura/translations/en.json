@@ -52,10 +52,13 @@
         "name": "Steps"
       },
       "target_calories": {
-        "name": "Target Calories"
+        "name": "Target Calories Burned"
       },
       "total_calories": {
-        "name": "Total Calories"
+        "name": "Total Calories Burned"
+      },
+      "active_calories": {
+        "name": "Active Calories Burned"
       },
       "equivalent_walking_distance": {
         "name": "Equivalent Walking Distance"
