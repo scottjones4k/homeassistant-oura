@@ -14,8 +14,8 @@ class DailyReadiness(BaseModel):
     id: str
     day: str
     score: int
-    temperature_deviation: int
-    temperature_trend_deviation: int
+    temperature_deviation: float
+    temperature_trend_deviation: float
     timestamp: str
     contributors: ReadinessContributors
 
