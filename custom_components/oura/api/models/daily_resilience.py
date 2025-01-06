@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 
 class DailyResilienceContributors(BaseModel):
-    sleep_recovery: int
-    daytime_recovery: int
-    stress: int
+    sleep_recovery: float
+    daytime_recovery: float
+    stress: float
 
 class DailyResilience(BaseModel):
     id: str
