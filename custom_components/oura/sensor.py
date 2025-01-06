@@ -72,14 +72,14 @@ DAILY_SENSORS = (
         value_fn=lambda data: data.bpm,
         state_class=SensorStateClass.MEASUREMENT
     ),
-    OuraSensorEntityDescription(
-        key="daily_cardiovascular_age",
-        lookup_key="daily_cardiovascular_age",
-        translation_key="daily_cardiovascular_age",
-        value_fn=lambda data: data.vascular_age,
-        state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=UnitOfTime.YEARS
-    ),
+    # OuraSensorEntityDescription(
+    #     key="daily_cardiovascular_age",
+    #     lookup_key="daily_cardiovascular_age",
+    #     translation_key="daily_cardiovascular_age",
+    #     value_fn=lambda data: data.vascular_age,
+    #     state_class=SensorStateClass.MEASUREMENT,
+    #     native_unit_of_measurement=UnitOfTime.YEARS
+    # ),
     OuraSensorEntityDescription(
         key="age",
         lookup_key="personal_info",

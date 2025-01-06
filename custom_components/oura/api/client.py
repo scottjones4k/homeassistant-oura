@@ -46,7 +46,7 @@ class OuraClient:
         data.append(await self.async_daily_sleep())
         data.append(await self.async_daily_stress())
         data.append(await self.async_heartrate())
-        data.append(await self.async_cardiovascular_age())
+        # data.append(await self.async_cardiovascular_age())
         data.append(await self.async_personal_info())
         data.append(await self.async_activity())
         return data
