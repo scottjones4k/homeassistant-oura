@@ -45,6 +45,7 @@ class OuraUpdateCoordinator(DataUpdateCoordinator):
         #     raise UpdateFailed(f"Error communicating with API: {err}")
         lookup_table = {}
         for data in result:
-            lookup_table[data.lookup] = data
+            if data is not None:
+                lookup_table[data.lookup] = data
         
         return lookup_table
