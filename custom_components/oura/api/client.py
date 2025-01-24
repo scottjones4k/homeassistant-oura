@@ -72,90 +72,90 @@ class OuraClient:
     async def async_daily_readiness(self) -> DailyReadiness:
         data = await self.make_request("GET", "daily_readiness", params=build_date_params())
         try:
-            readiness = DailyReadiness(**data['data'][-1]) 
+            return DailyReadiness(**data['data'][-1]) 
         except IndexError:
             _LOGGER.warning("Failed to get readiness from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get readiness from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return readiness
+        return None
     
     async def async_daily_resilience(self) -> DailyResilience:
         data = await self.make_request("GET", "daily_resilience", params=build_date_params())
         try:
-            resilience = DailyResilience(**data['data'][-1])
+            return DailyResilience(**data['data'][-1])
         except IndexError:
             _LOGGER.warning("Failed to get resilience from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get resilience from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return resilience
+        return None
     
     async def async_daily_sleep(self) -> DailySleep:
         data = await self.make_request("GET", "daily_sleep", params=build_date_params())
         try:
-            sleep = DailySleep(**data['data'][-1])
+            return DailySleep(**data['data'][-1])
         except IndexError:
             _LOGGER.warning("Failed to get sleep from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get sleep from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return sleep
+        return None
     
     async def async_daily_stress(self) -> DailyStress:
         data = await self.make_request("GET", "daily_stress", params=build_date_params())
         try:
-            stress = DailyStress(**data['data'][-1])
+            return DailyStress(**data['data'][-1])
         except IndexError:
             _LOGGER.warning("Failed to get stress from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get stress from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return stress
+        return None
     
     async def async_heartrate(self) -> HeartRate:
         data = await self.make_request("GET", "heartrate", params=build_datetime_params())
         try:
-            heartrate = HeartRate(**data['data'][-1])
+            return HeartRate(**data['data'][-1])
         except IndexError:
             _LOGGER.warning("Failed to get heart rate from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get heart rate from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return heartrate
+        return None
     
     async def async_cardiovascular_age(self) -> DailyCardiovascularAge:
         data = await self.make_request("GET", "daily_cardiovascular_age", params=build_date_params())
         try:
-            age = DailyCardiovascularAge(**data['data'][-1])
+            return DailyCardiovascularAge(**data['data'][-1])
         except IndexError:
             _LOGGER.warning("Failed to get cardiovascular age from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get cardiovascular age from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return age
+        return None
     
     async def async_personal_info(self) -> PersonalInfo:
         data = await self.make_request("GET", "personal_info")
         try:
-            info = PersonalInfo(**data)
+            return PersonalInfo(**data)
         except IndexError:
             _LOGGER.warning("Failed to get personal info from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get personal info from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return info
+        return None
     
     async def async_activity(self) -> DailyActivity:
         data = await self.make_request("GET", "daily_activity")
         try:
-            activity = DailyActivity(**data['data'][-1])
+            return DailyActivity(**data['data'][-1])
         except IndexError:
             _LOGGER.warning("Failed to get activity from Oura API: %s", str(data))
         except KeyError:
             _LOGGER.error("Failed to get activity from Oura API: %s", str(data))
             _raise_auth_or_response_error(data)
-        return activity
+        return None
     
 def build_date_params():
     today = datetime.today()
